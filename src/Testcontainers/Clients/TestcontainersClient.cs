@@ -179,14 +179,12 @@ namespace DotNet.Testcontainers.Clients
         {
           tarOutputStream.IsStreamOwner = false;
 
-          var header = new TarHeader();
-          header.Name = containerPath;
-          header.UserId = userId;
-          header.GroupId = groupId;
-          header.Mode = accessMode;
-          header.Size = fileContent.Length;
+          var entry = TarEntry.CreateTarEntry(filePath);
+          entry.TarHeader.UserId = userId;
+          entry.TarHeader.GroupId = groupId;
+          entry.TarHeader.Mode = accessMode;
+          entry.Size = fileContent.Length;
 
-          var entry = new TarEntry(header);
 
           await tarOutputStream.PutNextEntryAsync(entry, ct)
             .ConfigureAwait(false);
@@ -200,6 +198,9 @@ namespace DotNet.Testcontainers.Clients
 #endif
 
           await tarOutputStream.CloseEntryAsync(ct)
+            .ConfigureAwait(false);
+
+          await tarOutputStream.FinishAsync(ct)
             .ConfigureAwait(false);
         }
 

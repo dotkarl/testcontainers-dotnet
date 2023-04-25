@@ -4,7 +4,7 @@ namespace Testcontainers.Kafka;
 [PublicAPI]
 public sealed class KafkaBuilder : ContainerBuilder<KafkaBuilder, KafkaContainer, KafkaConfiguration>
 {
-    public const string KafkaImage = "confluentinc/cp-kafka:6.1.9";
+    public const string KafkaImage = "confluentinc/cp-kafka:7.0.9";
 
     public const ushort KafkaPort = 9092;
 
@@ -84,7 +84,7 @@ public sealed class KafkaBuilder : ContainerBuilder<KafkaBuilder, KafkaContainer
                 startupScript.Append("echo '' > /etc/confluent/docker/ensure");
                 startupScript.Append(lf);
                 startupScript.Append("/etc/confluent/docker/run");
-                return container.CopyFileAsync(StartupScriptFilePath, Encoding.Default.GetBytes(startupScript.ToString()), 493, ct: ct);
+                return container.CopyFileAsync(StartupScriptFilePath, Encoding.Default.GetBytes(startupScript.ToString()), 493, 1000, 1000, ct: ct);
             });
     }
 
